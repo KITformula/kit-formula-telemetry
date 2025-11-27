@@ -136,13 +136,13 @@ if "mqtt_client" not in st.session_state:
 # ==========================================
 
 st.sidebar.title("Menu")
-mode = st.sidebar.radio("表示モード", ["📡 リアルタイム計測", "📂 過去ログ閲覧"])
+mode = st.sidebar.radio("表示モード", ["リアルタイム計測", "📂 過去ログ閲覧"])
 
 # ------------------------------------------
 #  A. リアルタイム計測モード
 # ------------------------------------------
-if mode == "📡 リアルタイム計測":
-    st.title("🏎️ Real-time Telemetry")
+if mode == "リアルタイム計測":
+    st.title("KIT Real-time Telemetry")
     
     header_metrics = st.empty()
     table_placeholder = st.empty()
@@ -261,3 +261,4 @@ elif mode == "📂 過去ログ閲覧":
                     )
             except Exception as e:
                 st.error(f"ファイルの読み込みに失敗しました: {e}")
+

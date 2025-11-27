@@ -261,15 +261,3 @@ elif mode == "📂 過去ログ閲覧":
                     )
             except Exception as e:
                 st.error(f"ファイルの読み込みに失敗しました: {e}")
-        
-        try:
-            styled_df = df.style.apply(highlight_bests, axis=None).format("{:.3f}", na_rep="--")
-            table_placeholder.dataframe(styled_df, use_container_width=True, height=400)
-        except Exception as e:
-            table_placeholder.dataframe(df, use_container_width=True, height=400)
-            
-    else:
-        table_placeholder.info("Waiting for data...")
-
-    time.sleep(0.5)
-

@@ -7,11 +7,11 @@ import os
 from datetime import datetime
 
 # --- 設定 ---
-MQTT_BROKER = "8560a3bce8ff43bb92829fea55036ac1.s1.eu.hivemq.cloud"
-MQTT_PORT = 8883
-MQTT_USER = "kitformula"
-MQTT_PASSWORD = "Kitformula-2026"
-TOPIC = "vehicle/telemetry/#"
+# MQTT_BROKER = "8560a3bce8ff43bb92829fea55036ac1.s1.eu.hivemq.cloud"
+# MQTT_PORT = 8883
+# MQTT_USER = "kitformula"
+# MQTT_PASSWORD = "Kitformula-2026"
+# TOPIC = "vehicle/telemetry/#"
 
 # データ保存先フォルダ
 DATA_DIR = "lap_data"
@@ -273,3 +273,4 @@ elif mode == "📂 過去ログ閲覧":
                     st.download_button("📥 CSVをダウンロード", f, file_name=selected_file, mime="text/csv")
             except Exception as e:
                 st.error(f"エラー: {e}")
+

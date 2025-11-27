@@ -19,8 +19,9 @@ if "lap_history" not in st.session_state:
     st.session_state.lap_history = []
 
 if "current_lap_data" not in st.session_state:
+    # RPMとSpeedを削除
     st.session_state.current_lap_data = {
-        "s1": None, "s2": None, "s3": None, "rpm": 0, "spd": 0
+        "s1": None, "s2": None, "s3": None
     }
 
 if "last_lap_count" not in st.session_state:
@@ -45,16 +46,16 @@ def on_message(client, userdata, msg):
                 }
                 st.session_state.lap_history.append(last_lap_record)
             
+            # リセット
             st.session_state.current_lap_data = {"s1": None, "s2": None, "s3": None}
             st.session_state.last_lap_count = current_lc
 
-        # データ更新
+        # データ更新 (セクタータイムのみ)
         if "s1" in payload: st.session_state.current_lap_data["s1"] = payload["s1"]
         if "s2" in payload: st.session_state.current_lap_data["s2"] = payload["s2"]
         if "s3" in payload: st.session_state.current_lap_data["s3"] = payload["s3"]
         
-        st.session_state.current_lap_data["rpm"] = payload.get("rpm", 0)
-        st.session_state.current_lap_data["spd"] = payload.get("spd", 0)
+        # RPM/Speedの取得処理は削除
 
     except Exception as e:
         print(f"Error: {e}")
@@ -110,15 +111,13 @@ if "mqtt_client" not in st.session_state:
     st.rerun()
 
 while True:
-    # A. ヘッダー情報
+    # A. ヘッダー情報 (RPM/Speedを削除し、現在のラップ数だけ大きく表示)
     curr = st.session_state.current_lap_data
     lap = st.session_state.last_lap_count
     
     with header_metrics.container():
-        c1, c2, c3 = st.columns(3)
-        c1.metric("Current Lap", f"Lap {lap}")
-        c2.metric("RPM", f"{curr.get('rpm', 0)}")
-        c3.metric("Speed", f"{curr.get('spd', 0)} km/h")
+        # カラムを分けずに中央にドーンと表示、あるいは他の情報（水温など）があれば並べる
+        st.metric("Current Lap", f"Lap {lap}")
 
     # B. テーブルデータ作成
     data_list = st.session_state.lap_history.copy()
@@ -134,7 +133,6 @@ while True:
     if len(display_data) > 0:
         df = pd.DataFrame(display_data)
         
-        # ★重要: データを数値型に強制変換（これでNoneがNaNになりエラーが消える）
         cols_to_fix = ["Total Time", "Sector 1", "Sector 2", "Sector 3"]
         for c in cols_to_fix:
             if c in df.columns:
@@ -142,12 +140,10 @@ while True:
 
         df.set_index("Lap", inplace=True)
         
-        # スタイリングして表示
         try:
             styled_df = df.style.apply(highlight_bests, axis=None).format("{:.3f}", na_rep="--")
             table_placeholder.dataframe(styled_df, use_container_width=True, height=400)
         except Exception as e:
-            # もしスタイリングでコケても、生の表だけは表示する（安全策）
             table_placeholder.dataframe(df, use_container_width=True, height=400)
             
     else:

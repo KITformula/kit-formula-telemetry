@@ -4,11 +4,11 @@ import json
 import time
 import paho.mqtt.client as mqtt
 
-# --- 設定 ---
-MQTT_BROKER = "YOUR_BROKER_URL"  # HiveMQなどのURL
+# 車両側の config.py と同じ設定をここに書きます
+MQTT_BROKER = "8560a3bce8ff43bb92829fea55036ac1.s1.eu.hivemq.cloud"
 MQTT_PORT = 8883
 MQTT_USER = "kitformula"
-MQTT_PASSWORD = "YOUR_PASSWORD"
+MQTT_PASSWORD = "Kitformula-2026"
 TOPIC = "vehicle/telemetry/#"
 
 # --- 1. セッションステート初期化（履歴保存用） ---
@@ -160,3 +160,4 @@ while True:
         table_placeholder.info("Waiting for start...")
 
     time.sleep(0.5) # 更新頻度
+
